@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Primary Color -->
+    <color name="colorPrimary">#1E90FF</color>
+    <color name="colorPrimaryVariant">#1565C0</color>
+    <color name="colorPrimaryLight">#63B8FF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Secondary Color -->
+    <color name="colorSecondary">#F57C00</color>
+    <color name="colorSecondaryVariant">#FF8C00</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+    <!-- Background Color -->
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="colorOnBackground">#333333</color>
+
+    <!-- Surface Color -->
+    <color name="surfaceColor">#F5F5F5</color>
+    <color name="colorOnSurface">#333333</color>
+
+    <!-- Error Color -->
+    <color name="colorError">#B00020</color>
+    <color name="colorOnError">#FFFFFF</color>
+
+    <!-- Accent Color -->
+    <color name="colorAccent">#FFA500</color>
+    <color name="colorAccentGreen">#43A047</color>
+
+
+    <!-- Divider Colors -->
+    <color name="dividerColor">#E0E0E0</color> <!-- Light gray dividers -->
+
+    <!-- Dialog Background Color for Light Theme -->
+    <color name="cardBackgroundColor">#FDFDFD</color>
+
+    <color name="logout">#686666</color>
+
+
+    <!-- Snackbar -->
+    <color name="snackbar_background">#323232</color>
+
+    <!-- General Colors -->
+    <color name="green">#BF4CAF50</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="colorOverlay">#33000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="colorPrimaryTrans">#CC1E90FF</color>
+    <color name="home_status_bar">#188CE7</color>
+    <color name="gray">#717171</color>
+    <color name="dark">#333333</color>
+    <color name="light_gray">#E0E0E0</color> <!-- Light Gray -->
+
+    <color name="selectedColor">#BBDEFB</color>
+
+    <color name="lightGrayBackground">#F2F2F2</color>
+
+    <color name="colorDarkGray">#b4b4b4</color>
+    <color name="colorGray">#0F797979</color>
+
+
+
+
+    <color name="status_pending">#FFD700</color>       <!-- Gold -->
+    <color name="status_confirmed">#32CD32</color>    <!-- Lime Green -->
+    <color name="status_rescheduled">#FFA500</color>  <!-- Orange -->
+    <color name="status_in_progress">#1E90FF</color>  <!-- Dodger Blue -->
+    <color name="status_completed">#228B22</color>    <!-- Forest Green -->
+    <color name="status_cancelled">#FF6347</color>    <!-- Tomato Red -->
+    <color name="status_no_show">#8B4513</color>      <!-- Saddle Brown -->
+    <color name="status_rejected">#DC143C</color>     <!-- Crimson -->
+
+</resources>

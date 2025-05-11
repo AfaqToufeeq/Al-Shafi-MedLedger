@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Al-Shafi MedLedger</string>
+    <string name="default_web_client_id">tv9utplcmbqdvdcqnt2uhtt6e932m9f6</string>
+    <string name="permission_needed">Permission Needed</string>
+    <string name="title_permission">Title Permission!</string>
+    <string name="deny">Deny</string>
+
+
+    <string name="camera">Camera</string>
+    <string name="select">Select</string>
+    <string name="gallery">Gallery</string>
+    <string name="login_to_your_account">Login to your Account</string>
+    <string name="login_id">Login ID</string>
+    <string name="password">password</string>
+    <string name="log_in">Log in</string>
+    <string name="let_s_sign_in_to_your_account">Let’s sign in to your account</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or">or</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="don_t_you_have_account">Don\'t you have account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="let_s_do_a_quick_signup_to_make_your_account">Let\'s do a quick signup to make your account</string>
+    <string name="sign_up_to_make_your_account">Sign up to make your account</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="address">Address</string>
+    <string name="error_required_field">This field is required</string>
+    <string name="error_invalid_email">Please enter a valid email address</string>
+    <string name="error_invalid_phone">Please enter a valid phone number</string>
+    <string name="back_button">back</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update_medicine">Update Medicine</string>
+</resources>

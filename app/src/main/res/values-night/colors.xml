@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Color -->
+    <color name="colorPrimary">#1E88E5</color>
+    <color name="colorPrimaryVariant">#1565C0</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Secondary Color -->
+    <color name="colorSecondary">#F57C00</color>
+    <color name="colorSecondaryVariant">#EF6C00</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+    <!-- Background Color -->
+    <color name="backgroundColor">#121212</color>
+    <color name="colorOnBackground">#E0E0E0</color>
+
+    <!-- Surface Color -->
+    <color name="surfaceColor">#1E1E1E</color>
+    <color name="colorOnSurface">#E0E0E0</color>
+
+    <!-- Error Color -->
+    <color name="colorError">#CF6679</color>
+    <color name="colorOnError">#FFFFFF</color>
+
+    <color name="logout">#d9d9d9</color>
+
+    <!-- Accent Color -->
+    <color name="colorAccent">#F57C00</color>
+    <color name="colorAccentGreen">#388E3C</color>
+
+    <!-- Divider Colors -->
+    <color name="dividerColor">#333333</color> <!-- Dark gray for dividers -->
+
+    <!-- Dialog Background Color for Dark Theme -->
+    <color name="cardBackgroundColor">#1E1E1E</color>
+    <color name="colorOverlay">#33000000</color>
+
+    <!-- General Colors -->
+    <color name="white">#000000</color>
+    <color name="black">#FFFFFF</color>
+    <color name="light_gray">#424242</color> <!-- Darker Gray for better contrast -->
+
+
+    <color name="selectedColor">#0D47A1</color>
+
+
+    <color name="status_pending">#FFC107</color>       <!-- Amber -->
+    <color name="status_confirmed">#66BB6A</color>    <!-- Light Green -->
+    <color name="status_rescheduled">#FF9800</color>  <!-- Deep Orange -->
+    <color name="status_in_progress">#42A5F5</color>  <!-- Light Blue -->
+    <color name="status_completed">#2E7D32</color>    <!-- Dark Green -->
+    <color name="status_cancelled">#E57373</color>    <!-- Light Red -->
+    <color name="status_no_show">#A1887F</color>      <!-- Light Brown -->
+    <color name="status_rejected">#D32F2F</color>     <!-- Dark Red -->
+
+</resources>

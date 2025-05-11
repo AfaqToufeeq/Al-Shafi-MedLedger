@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "556491425421",
+    "project_id": "alshafi-medledger",
+    "storage_bucket": "alshafi-medledger.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556491425421:android:1d5d0042c53b640a1fc4c4",
+        "android_client_info": {
+          "package_name": "com.pentabytex.alshafimedledger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd_3clDvXmuZ0_ssX_K6XVG0RMa_OYakU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

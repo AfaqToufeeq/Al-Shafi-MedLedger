@@ -1,0 +1,20 @@
+<!-- res/drawable/rounded_corner_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Shadow Layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#E0E0E0" /> <!-- Light gray shadow for subtle effect -->
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Background Layer -->
+    <item android:top="8dp" android:bottom="8dp" android:left="8dp" android:right="8dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+</layer-list>
