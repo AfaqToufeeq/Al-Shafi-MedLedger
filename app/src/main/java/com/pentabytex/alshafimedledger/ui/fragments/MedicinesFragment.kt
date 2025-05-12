@@ -1,5 +1,6 @@
 package com.pentabytex.alshafimedledger.ui.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.pentabytex.alshafimedledger.data.models.Medicine
 import com.pentabytex.alshafimedledger.databinding.FragmentMedicinesBinding
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.ui.activities.AddMedicineActivity
+import com.pentabytex.alshafimedledger.ui.activities.MedicineDetailsActivity
 import com.pentabytex.alshafimedledger.utils.Constants.IntentExtras.TRANSFER_DATA
 import com.pentabytex.alshafimedledger.utils.Utils
 import com.pentabytex.alshafimedledger.viewmodels.MedicineViewModel
@@ -56,9 +58,14 @@ class MedicinesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = MedicineAdapter { medicine ->
-           navigationToMedicineDetails(medicine)
-        }
+        adapter = MedicineAdapter(
+            onItemClick = { medicine ->
+                navigationToMedicineDetails(medicine)
+            },
+            onDeleteClick = { medicine ->
+                showDeleteDialog(medicine)
+            }
+        )
 
         binding.apply {
             medicinesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -70,7 +77,18 @@ class MedicinesFragment : Fragment() {
         val bundle = Bundle().apply {
             putParcelable(TRANSFER_DATA, medicine)
         }
-        Utils.navigateToActivity(requireContext(), AddMedicineActivity::class.java, isAnimation = true, extras = bundle)
+        Utils.navigateToActivity(requireContext(), MedicineDetailsActivity::class.java, isAnimation = true, extras = bundle)
+    }
+
+    private fun showDeleteDialog(medicine: Medicine) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Medicine")
+            .setMessage("Are you sure you want to delete this ${medicine.name} medicine?")
+            .setPositiveButton("Delete") { _, _ ->
+                viewModel.deleteMedicine(medicine.id)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun observeMedicines() {
@@ -85,6 +103,31 @@ class MedicinesFragment : Fragment() {
                         is Resource.Success -> {
                             binding.loadingOverlay.visibility = View.GONE
                             adapter.submitList(resource.data)
+                        }
+
+                        is Resource.Error -> {
+                            binding.loadingOverlay.visibility = View.GONE
+                            Utils.showSnackbar(binding.root, resource.message)
+                        }
+
+                        else -> Unit
+                    }
+                }
+            }
+        }
+
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.deleteMedicineState.collect { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            binding.loadingOverlay.visibility = View.VISIBLE
+                        }
+
+                        is Resource.Success -> {
+                            binding.loadingOverlay.visibility = View.GONE
+                           Utils.showSnackbar(binding.root,"Medicine record is deleted!")
                         }
 
                         is Resource.Error -> {

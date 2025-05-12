@@ -180,4 +180,14 @@ object Utils {
         context.startActivity(intent)
     }
 
+
+    /**
+     * Formats a timestamp to a readable date string.
+     */
+    fun formatDate(timestamp: Long): String {
+        val sdf = java.text.SimpleDateFormat("dd MMM yyyy, hh:mm a", java.util.Locale.getDefault())
+        return sdf.format(java.util.Date(timestamp))
+    }
+
+
 }

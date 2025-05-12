@@ -40,7 +40,6 @@ class AddMedicineActivity : AppCompatActivity() {
         InsetsUtil.applyInsetsWithInitialPadding(binding.root)
 
         getIntentData()
-
         setUpUI()
         setUpSpinner()
         observeSaveState()
@@ -51,29 +50,36 @@ class AddMedicineActivity : AppCompatActivity() {
         isEditMode = medicineToEdit != null
 
         medicineToEdit?.let { med ->
-            binding.edtMedicineName.setText(med.name)
-            binding.edtVolume.setText(med.volume)
-            binding.edtQuantity.setText(med.quantity.toString())
-            binding.edtPurchasePrice.setText(med.purchasePrice.toString())
+            binding.apply {
+                toolbar.backTitleTV.text = getString(R.string.update_medicine)
 
-            binding.spinnerMedicineType.setText(med.type, false)
-            binding.btnSaveMedicine.text = getString(R.string.update_medicine)
+                edtMedicineName.setText(med.name)
+                edtVolume.setText(med.volume)
+                edtNotes.setText(med.notes)
+                edtTotalStock.setText(med.totalStock.toString())
+                edtSoldStock.setText(med.soldStock.toString())
+                edtPurchasePrice.setText(med.purchasePrice.toString())
+                edtSellingPrice.setText(med.sellingPrice.toString())
+
+                spinnerMedicineType.setText(med.type, false)
+                btnSaveMedicine.text = getString(R.string.update_medicine)
+            }
         }
 
     }
 
     private fun setUpUI() {
         binding.apply {
-            toolbar.backTitleTV.text = DashboardTitle.AddMedicines.title
-            toolbar.backIV.setOnClickListener { finish() }
+            toolbar.apply {
+                if (!isEditMode) backTitleTV.text = DashboardTitle.AddMedicines.title
+
+                backIV.setOnClickListener { finish() }
+            }
 
             btnSaveMedicine.setOnClickListener {
                 if (isFormValid()) {
-                    if (isEditMode) {
-                        updateMedicineData(medicineToEdit!!.id)
-                    } else {
-                        saveMedicineData()
-                    }
+                    if (isEditMode) updateMedicineData(medicineToEdit!!.id)
+                    else saveMedicineData()
 
                 } else {
                     showError("Please fill all required fields.")
@@ -82,12 +88,10 @@ class AddMedicineActivity : AppCompatActivity() {
 
             edtMedicineName.addTextChangedListener { validateForm() }
             edtVolume.addTextChangedListener { validateForm() }
-            edtQuantity.addTextChangedListener { validateForm() }
+            edtTotalStock.addTextChangedListener { validateForm() }
             edtPurchasePrice.addTextChangedListener { validateForm() }
 
-            binding.spinnerMedicineType.setOnClickListener {
-                binding.spinnerMedicineType.showDropDown()
-            }
+            spinnerMedicineType.setOnClickListener { spinnerMedicineType.showDropDown() }
         }
     }
 
@@ -95,22 +99,18 @@ class AddMedicineActivity : AppCompatActivity() {
     private fun setUpSpinner() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, medicineTypes)
         binding.spinnerMedicineType.setAdapter(adapter)
-
-        binding.spinnerMedicineType.setOnItemClickListener { _, _, position, _ ->
-            val selected = adapter.getItem(position)
-        }
     }
 
-    // Form validation
+
     private fun isFormValid(): Boolean {
         val medicineName = binding.edtMedicineName.text.toString().trim()
         val volume = binding.edtVolume.text.toString().trim()
-        val quantity = binding.edtQuantity.text.toString().trim()
+        val totalStock = binding.edtTotalStock.text.toString().trim()
         val purchasePrice = binding.edtPurchasePrice.text.toString().trim()
         val medicineType = binding.spinnerMedicineType.text.toString().trim()
 
-        // Check for empty fields
-        return !(medicineName.isEmpty() || volume.isEmpty() || quantity.isEmpty() || purchasePrice.isEmpty() || medicineType.isEmpty())
+        return !(medicineName.isEmpty() || volume.isEmpty() || totalStock.isEmpty()
+                || purchasePrice.isEmpty() || medicineType.isEmpty())
     }
 
     // Handle the saving of the medicine data
@@ -118,34 +118,45 @@ class AddMedicineActivity : AppCompatActivity() {
         val medicineName = binding.edtMedicineName.text.toString().trim()
         val medicineType = binding.spinnerMedicineType.text.toString().trim()
         val volume = binding.edtVolume.text.toString().trim()
-        val quantity = binding.edtQuantity.text.toString().trim().toInt()
+        val notes = binding.edtNotes.text.toString().trim()
+        val totalStock = binding.edtTotalStock.text.toString().trim().toInt()
+        val soldStock = binding.edtSoldStock.text.toString().trim().toInt()
         val purchasePrice = binding.edtPurchasePrice.text.toString().trim().toDouble()
+        val sellingPrice = binding.edtSellingPrice.text.toString().trim().toDouble()
 
         val medicine = Medicine(
             id = System.currentTimeMillis().toString(),
             name = medicineName,
             type = medicineType,
             volume = volume,
-            quantity = quantity,
-            purchasePrice = purchasePrice
+            notes = notes,
+            totalStock = totalStock,
+            soldStock = soldStock,
+            purchasePrice = purchasePrice,
+            sellingPrice = sellingPrice
         )
 
         medicineViewModel.saveMedicine(medicine)
     }
 
-
+    // Handle the update of the medicine data
     private fun updateMedicineData(medicineId: String) {
         val updatedMedicine = Medicine(
             id = medicineId,
             name = binding.edtMedicineName.text.toString().trim(),
-            volume = binding.edtVolume.text.toString().trim(),
-            quantity = binding.edtQuantity.text.toString().trim().toInt(),
-            purchasePrice = binding.edtPurchasePrice.text.toString().trim().toDouble(),
             type = binding.spinnerMedicineType.text.toString().trim(),
+            volume = binding.edtVolume.text.toString().trim(),
+            notes = binding.edtNotes.text.toString().trim(),
+            soldStock = binding.edtSoldStock.text.toString().trim().toInt(),
+            totalStock = binding.edtTotalStock.text.toString().trim().toInt(),
+            purchasePrice = binding.edtPurchasePrice.text.toString().trim().toDouble(),
+            sellingPrice = binding.edtSellingPrice.text.toString().trim().toDouble(),
+            createdAt = medicineToEdit?.createdAt ?: System.currentTimeMillis(),
         )
 
         medicineViewModel.updateMedicine(updatedMedicine)
     }
+
 
     private fun validateForm() {
         binding.btnSaveMedicine.isEnabled = isFormValid()
@@ -169,7 +180,7 @@ class AddMedicineActivity : AppCompatActivity() {
                             binding.btnSaveMedicine.isEnabled = false
                         }
                         is Resource.Success -> {
-                            showSuccess("Medicine saved successfully")
+                            showSuccess("Medicine saved successfully!")
                             finish()
                         }
                         is Resource.Error -> {
@@ -181,6 +192,5 @@ class AddMedicineActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 }

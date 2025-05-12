@@ -9,7 +9,9 @@ data class Medicine(
     val name: String = "",
     val type: String = "",
     val volume: String = "",
-    val quantity: Int = 0,
+    val notes: String = "No notes yet!",
+    val totalStock: Int = 0,
+    val soldStock: Int = 0,
     val purchasePrice: Double = 0.0,
     val sellingPrice: Double = 0.0, // Optional pre-filled price
     val createdAt: Long = System.currentTimeMillis(),

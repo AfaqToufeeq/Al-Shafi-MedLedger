@@ -34,6 +34,7 @@
 
     <!-- Dialog Background Color for Light Theme -->
     <color name="cardBackgroundColor">#FDFDFD</color>
+    <color name="cardBackgroundColor2">#FAF8F2</color>
 
     <color name="logout">#686666</color>
 

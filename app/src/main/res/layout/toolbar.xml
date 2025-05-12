@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/_12sdp"
         android:layout_marginTop="10dp"
-
         android:layout_marginHorizontal="@dimen/_12sdp"
         android:src="@drawable/back_arrow_icon"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,16 +34,16 @@
         app:layout_constraintTop_toTopOf="@id/back_IV" />
 
     <ImageView
-        android:id="@+id/cartIV"
+        android:id="@+id/deleteIV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_12sdp"
         android:visibility="gone"
+        android:src="@drawable/ic_trash"
         android:layout_marginHorizontal="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:tint="@color/white" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

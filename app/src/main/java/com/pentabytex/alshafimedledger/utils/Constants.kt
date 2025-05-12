@@ -35,4 +35,5 @@ object Constants {
 
     // 🔹 Other Static Values
     const val EMAIL_ADDRESS = "jerryaxe24@gmail.com"
+    const val STOCK_LIMIT = 10
 }
