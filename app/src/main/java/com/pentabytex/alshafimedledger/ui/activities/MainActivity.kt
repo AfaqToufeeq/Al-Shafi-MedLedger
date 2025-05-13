@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             userViewModel.isUserLoggedIn.collect { isLoggedIn ->
-                Log.d("MainActivity", "User login status: $isLoggedIn")
+                Log.d("MainActivityLogin", "User login status: $isLoggedIn")
                 if (!isLoggedIn) {
                     startLoginActivity()
                 }

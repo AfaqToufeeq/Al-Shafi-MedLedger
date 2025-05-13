@@ -2,6 +2,8 @@ package com.pentabytex.alshafimedledger.ui.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +48,7 @@ class MedicinesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         setUpUI()
+        setupSearch()
         setupRecyclerView()
         observeMedicines()
     }
@@ -56,6 +59,17 @@ class MedicinesFragment : Fragment() {
             toolbar.backIV.setOnClickListener { findNavController().popBackStack() }
         }
     }
+
+    private fun setupSearch() {
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.searchMedicines(s.toString())
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
 
     private fun setupRecyclerView() {
         adapter = MedicineAdapter(
@@ -94,7 +108,7 @@ class MedicinesFragment : Fragment() {
     private fun observeMedicines() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.medicines.collect { resource ->
+                viewModel.filterMedicines.collect { resource ->
                     when (resource) {
                         is Resource.Loading -> {
                             binding.loadingOverlay.visibility = View.VISIBLE

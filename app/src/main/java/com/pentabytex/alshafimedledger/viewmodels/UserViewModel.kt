@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pentabytex.alshafimedledger.data.models.User
 import com.pentabytex.alshafimedledger.data.repository.UserRepository
@@ -29,12 +28,9 @@ class UserViewModel @Inject constructor(
     private val _userState = MutableStateFlow<FirebaseUser?>(null)
     val userState: StateFlow<FirebaseUser?> get() = _userState
 
-    private val _isUserLoggedIn = MutableStateFlow(false)
-    val isUserLoggedIn: StateFlow<Boolean> get() = _isUserLoggedIn
+    private val _isUserLoggedIn = MutableSharedFlow<Boolean>()
+    val isUserLoggedIn: SharedFlow<Boolean> get() = _isUserLoggedIn
 
-    private val authStateListener = FirebaseAuth.AuthStateListener { auth ->
-        _isUserLoggedIn.value = auth.currentUser != null
-    }
 
     private val _forgotPasswordState = MutableStateFlow<Result<Unit>?>(null)
     val forgotPasswordState: StateFlow<Result<Unit>?> get() = _forgotPasswordState
@@ -68,8 +64,8 @@ class UserViewModel @Inject constructor(
     val filteredAllUsers: LiveData<List<User>> get() = _filteredAllUsers
 
     init {
+        checkUserLoginStatus()
         getCurrentUser()
-        userRepository.addAuthStateListener(authStateListener)
     }
 
     fun registerUser(user: User) {
@@ -96,7 +92,6 @@ class UserViewModel @Inject constructor(
             _loadingState.value = false
         }
     }
-
 
 
     fun logoutUser() {
@@ -132,7 +127,7 @@ class UserViewModel @Inject constructor(
     }
 
     /** Search users by name or email */
-    fun searchAppointmentUsers(query: String) {
+    fun searchUsers(query: String) {
         viewModelScope.launch(dispatcherProvider.default) {
             val filteredList = if (query.isEmpty()) {
                 _profileListState.value
@@ -188,6 +183,5 @@ class UserViewModel @Inject constructor(
             _isUserLoggedIn.emit(currentUser != null)
         }
     }
-
 
 }

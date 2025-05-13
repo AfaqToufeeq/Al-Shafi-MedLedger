@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private val authViewModel: UserViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply { setKeepOnScreenCondition { false } }
@@ -56,9 +56,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-
         lifecycleScope.launch {
-            authViewModel.isUserLoggedIn.collect { flag ->
+            userViewModel.isUserLoggedIn.collect { flag ->
                 if (flag)
                     navigateToActivity(this@LoginActivity, MainActivity::class.java, finishCurrentActivity = true, isAnimation = true)
                 else
@@ -68,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         lifecycleScope.launch {
-            authViewModel.errorState.collect { error ->
+            userViewModel.errorState.collect { error ->
                 if (error != null) {
                     showToast(this@LoginActivity, error)
                 }
@@ -77,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
 
         //Observer Progress loading
         lifecycleScope.launch {
-            authViewModel.loadingState.collectLatest { isLoading ->
+            userViewModel.loadingState.collectLatest { isLoading ->
                 binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
             }
         }
@@ -90,7 +89,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (!validateInput(email, password)) return
 
-        authViewModel.loginUser(email, password)
+        userViewModel.loginUser(email, password)
     }
 
 

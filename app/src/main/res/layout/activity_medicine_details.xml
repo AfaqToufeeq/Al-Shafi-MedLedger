@@ -43,7 +43,7 @@
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="4dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/cardBackgroundColor2">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/cardBackgroundColor2"
                 android:layout_marginTop="5dp">
 
@@ -241,7 +241,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/cardBackgroundColor2"
                 android:layout_marginTop="12dp">
 
@@ -282,7 +282,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/cardBackgroundColor2"
                 android:layout_marginTop="5dp">
 
@@ -426,7 +426,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="20dp"
                 app:cardBackgroundColor="@color/cardBackgroundColor2"
                 android:layout_marginTop="5dp">
 

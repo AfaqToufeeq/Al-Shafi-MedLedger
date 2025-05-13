@@ -155,9 +155,4 @@ class UserRepository @Inject constructor(
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
 
-    fun addAuthStateListener(listener: FirebaseAuth.AuthStateListener) {
-        auth.addAuthStateListener(listener)
-    }
-
-
 }
