@@ -30,6 +30,7 @@ object Constants {
     object FirebaseCollections {
         const val USERS = "users"
         const val MEDICINES = "medicines"
+        const val CUSTOMERS = "customers"
 
     }
 

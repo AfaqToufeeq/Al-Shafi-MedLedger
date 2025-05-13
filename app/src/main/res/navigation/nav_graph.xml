@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_homeFragment_to_medicinesFragment"
             app:destination="@id/medicinesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_customersFragment"
+            app:destination="@id/customersFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/medicinesFragment"
@@ -23,4 +27,14 @@
             android:id="@+id/action_medicinesFragment_to_nav_graph"
             app:popUpTo="@id/nav_graph" />
     </fragment>
+    <fragment
+        android:id="@+id/customersFragment"
+        android:name="com.pentabytex.alshafimedledger.ui.fragments.CustomersFragment"
+        android:label="fragment_customers"
+        tools:layout="@layout/fragment_customers" >
+        <action
+            android:id="@+id/action_customersFragment_to_nav_graph"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+
 </navigation>

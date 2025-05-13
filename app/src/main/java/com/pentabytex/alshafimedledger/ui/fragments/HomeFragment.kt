@@ -14,8 +14,10 @@ import com.pentabytex.alshafimedledger.adapter.QuickAccessAdapter
 import com.pentabytex.alshafimedledger.data.models.User
 import com.pentabytex.alshafimedledger.databinding.FragmentHomeBinding
 import com.pentabytex.alshafimedledger.enums.DashboardTitle
+import com.pentabytex.alshafimedledger.ui.activities.AddCustomerActivity
 import com.pentabytex.alshafimedledger.ui.activities.AddMedicineActivity
 import com.pentabytex.alshafimedledger.utils.Utils
+import com.pentabytex.alshafimedledger.utils.Utils.navigateToActivity
 import com.pentabytex.alshafimedledger.viewmodels.DashboardViewModel
 import com.pentabytex.alshafimedledger.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -105,10 +107,16 @@ class HomeFragment : Fragment() {
         quickAccessAdapter = QuickAccessAdapter { title ->
             when (DashboardTitle.entries.find { it.title == title }) {
                 DashboardTitle.AddMedicines-> {
-                    Utils.navigateToActivity(requireContext(), AddMedicineActivity::class.java, isAnimation = true)
+                    navigateToActivity(requireContext(), AddMedicineActivity::class.java, isAnimation = true)
                 }
                 DashboardTitle.ViewMedicines -> {
                    findNavController().navigate(R.id.action_homeFragment_to_medicinesFragment)
+                }
+                DashboardTitle.AddCustomers -> {
+                    navigateToActivity(requireContext(), AddCustomerActivity::class.java, isAnimation = true)
+                }
+                DashboardTitle.ViewCustomers -> {
+                    findNavController().navigate(R.id.action_homeFragment_to_customersFragment)
                 }
 
                 else -> {
