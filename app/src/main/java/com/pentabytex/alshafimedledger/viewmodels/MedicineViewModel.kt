@@ -123,6 +123,18 @@ class MedicineViewModel @Inject constructor(
         }
     }
 
+    fun deleteMedicinesBulk(medicines: List<Medicine>) {
+        _deleteMedicineState.value = Resource.Loading
+        viewModelScope.launch {
+            val result = repository.deleteMedicinesBulk(medicines)
+            _deleteMedicineState.value = result.fold(
+                onSuccess = { Resource.Success(Unit) },
+                onFailure = { Resource.Error(it.message ?: "Bulk delete failed") }
+            )
+        }
+    }
+
+
     fun resetStates() {
         _saveMedicineState.value = Resource.Idle
         _updateMedicineState.value = Resource.Idle

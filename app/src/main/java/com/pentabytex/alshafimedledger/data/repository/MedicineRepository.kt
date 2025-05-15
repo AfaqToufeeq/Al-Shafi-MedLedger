@@ -79,4 +79,17 @@ class MedicineRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+
+    suspend fun deleteMedicinesBulk(medicines: List<Medicine>): Result<Unit> {
+        return try {
+            medicines.forEach {
+                medicinesRef.child(it.id).removeValue().await()
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

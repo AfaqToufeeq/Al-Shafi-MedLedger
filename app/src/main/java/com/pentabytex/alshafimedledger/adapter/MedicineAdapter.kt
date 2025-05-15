@@ -12,10 +12,27 @@ import com.pentabytex.alshafimedledger.databinding.ItemMedicineBinding
 
 class MedicineAdapter(
     private val onItemClick: (Medicine) -> Unit,
-    private val onDeleteClick: (Medicine) -> Unit
+    private val onDeleteClick: (Medicine) -> Unit,
+    private val onItemLongClick: (Medicine) -> Unit,
+    private val onSelectionChanged: (Medicine, Boolean) -> Unit
 ) : ListAdapter<Medicine, MedicineAdapter.MedicineViewHolder>(DiffCallback) {
 
     private val expandedItemIds = mutableSetOf<String>()
+    private val selectedItems = mutableSetOf<String>() // Track selected items
+
+    private var isSelectionMode = false
+
+    fun setSelectionMode(enable: Boolean, medicine: Medicine) {
+        isSelectionMode = enable
+
+        if (enable) {
+            selectedItems.add(medicine.id)
+        } else {
+            selectedItems.clear()
+        }
+        notifyDataSetChanged()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineViewHolder {
         val binding = ItemMedicineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,13 +42,14 @@ class MedicineAdapter(
     override fun onBindViewHolder(holder: MedicineViewHolder, position: Int) {
         val item = getItem(position)
         val isExpanded = expandedItemIds.contains(item.id)
-        holder.bind(item, isExpanded)
+        val isItemSelected = selectedItems.contains(item.id)
+        holder.bind(item, isExpanded, isItemSelected, isSelectionMode)
     }
 
     inner class MedicineViewHolder(private val binding: ItemMedicineBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(medicine: Medicine, isExpanded: Boolean) = with(binding) {
+        fun bind(medicine: Medicine, isExpanded: Boolean, isSelected: Boolean, isSelectionMode: Boolean) = with(binding) {
             tvMedicineName.text = medicine.name
             tvTypeVolume.text = "${medicine.type} • ${medicine.volume}"
             tvQuantity.text = medicine.totalStock.toString()
@@ -68,9 +86,45 @@ class MedicineAdapter(
                 }
             }
 
-            root.setOnClickListener { onItemClick(medicine) }
+            // Handle checkbox visibility and click
+            // Show checkboxes only in selection mode
+            cbSelect.visibility = if (isSelectionMode) View.VISIBLE else View.GONE
+            ivDelete.visibility = if (isSelectionMode) View.GONE else View.VISIBLE
+            cbSelect.setOnCheckedChangeListener(null)
+            cbSelect.isChecked = isSelected
+
+            cbSelect.setOnCheckedChangeListener { _, isChecked ->
+                toggleSelection(medicine, isChecked)
+            }
+
+            root.setOnClickListener {
+                if (isSelectionMode) {
+                    toggleSelection(medicine, !isSelected)
+                } else {
+                    onItemClick(medicine)
+                }
+            }
+
+            root.setOnLongClickListener {
+                if (!isSelectionMode) {
+                    onItemLongClick(medicine)
+                }
+                true
+            }
+
             ivDelete.setOnClickListener { onDeleteClick(medicine) }
 
+        }
+
+        // Function to toggle selection state and notify
+        private fun toggleSelection(medicine: Medicine, isChecked: Boolean) {
+            if (isChecked) {
+                selectedItems.add(medicine.id)
+            } else {
+                selectedItems.remove(medicine.id)
+            }
+            onSelectionChanged(medicine, isChecked)
+            notifyItemChanged(adapterPosition)
         }
 
     }
