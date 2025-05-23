@@ -62,6 +62,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="4dp" />
 
+        <TextView
+            android:id="@+id/tvStatusTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Payment Status"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/tvNotes"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="Pending"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            app:chipBackgroundColor="@color/status_pending"
+            app:chipCornerRadius="12dp"
+            app:chipStrokeWidth="0dp"
+            android:paddingHorizontal="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvStatusTitle"
+            app:layout_constraintBottom_toBottomOf="@id/tvStatusTitle"/>
+
+
         <ImageView
             android:id="@+id/ivToggleDetails"
             android:layout_width="wrap_content"
@@ -83,7 +109,7 @@
             android:nestedScrollingEnabled="false"
             tools:listitem="@layout/item_sale"
             app:layout_constraintBottom_toTopOf="@id/tvTotalCost"
-            app:layout_constraintTop_toBottomOf="@id/tvNotes"
+            app:layout_constraintTop_toBottomOf="@id/tvStatusTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp" />

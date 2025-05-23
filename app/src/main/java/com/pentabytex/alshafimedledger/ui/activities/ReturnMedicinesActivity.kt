@@ -1,8 +1,10 @@
 package com.pentabytex.alshafimedledger.ui.activities
 
+import android.R
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -14,10 +16,12 @@ import com.pentabytex.alshafimedledger.data.models.Customer
 import com.pentabytex.alshafimedledger.data.models.Sale
 import com.pentabytex.alshafimedledger.databinding.ActivityReturnMedicinesBinding
 import com.pentabytex.alshafimedledger.databinding.FragmentConfirmationBinding
+import com.pentabytex.alshafimedledger.enums.PaymentStatus
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.utils.Constants.IntentExtras.TRANSFER_DATA
 import com.pentabytex.alshafimedledger.utils.InsetsUtil
 import com.pentabytex.alshafimedledger.utils.Utils
+import com.pentabytex.alshafimedledger.utils.Utils.formatDate
 import com.pentabytex.alshafimedledger.viewmodels.CustomerViewModel
 import com.pentabytex.alshafimedledger.viewmodels.MedicineViewModel
 import com.pentabytex.alshafimedledger.viewmodels.SaleViewModel
@@ -54,9 +58,26 @@ class ReturnMedicinesActivity : AppCompatActivity() {
                 backIV.setOnClickListener { finish() }
             }
 
-            buttonDelete.setOnClickListener {
-                showDeleteDialog(saleData.saleId)
-            }
+            buttonDelete.setOnClickListener { showDeleteDialog(saleData.saleId) }
+            actvPaymentStatus.setOnClickListener { actvPaymentStatus.showDropDown() }
+            buttonEdit.setOnClickListener { updateStatus() }
+        }
+    }
+
+    private fun updateStatus() {
+        binding.apply {
+            val paymentStatus = actvPaymentStatus.text.toString()
+            val amountReceived = etPaymentReceived.text.toString().toDouble()
+            val notes = etGlobalNote.text.toString()
+
+            val updatedSale = saleData.copy(
+                paymentStatus = paymentStatus,
+                amountReceived = amountReceived,
+                notes = notes,
+                updatedTimestamp = System.currentTimeMillis()
+            )
+
+            saleViewModel.updateSale(updatedSale)
         }
     }
 
@@ -76,6 +97,14 @@ class ReturnMedicinesActivity : AppCompatActivity() {
         binding.apply {
             rvMedicines.layoutManager = LinearLayoutManager(this@ReturnMedicinesActivity)
             rvMedicines.adapter = saleItemAdapter
+
+
+            val statusAdapter = ArrayAdapter(
+                this@ReturnMedicinesActivity,
+                R.layout.simple_dropdown_item_1line,
+                PaymentStatus.entries.filter { it != PaymentStatus.ALL }.map { it.displayName }
+            )
+           actvPaymentStatus.setAdapter(statusAdapter)
         }
     }
 
@@ -120,6 +149,25 @@ class ReturnMedicinesActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                saleViewModel.updateSaleState.collect { resource ->
+                    when (resource) {
+                        is Resource.Loading -> binding.loadingOverlay.visibility = View.VISIBLE
+                        is Resource.Success -> {
+                            binding.loadingOverlay.visibility = View.GONE
+                            Utils.showSnackbar(binding.root, "sale record is updated!")
+                        }
+                        is Resource.Error -> {
+                            binding.loadingOverlay.visibility = View.GONE
+                            Utils.showSnackbar(binding.root, resource.message)
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 saleViewModel.deleteSaleState.collect { resource ->
                     when (resource) {
                         is Resource.Loading -> binding.loadingOverlay.visibility = View.VISIBLE
@@ -144,10 +192,13 @@ class ReturnMedicinesActivity : AppCompatActivity() {
             tvCustomerName.text = "Name: ${customer.name}"
             tvCustomerPhone.text = "Phone: ${customer.phone}"
             tvCustomerAddress.text = "Address: ${customer.address}"
+
+            etPaymentReceived.setText(saleData.amountReceived.toString())
+            actvPaymentStatus.setText(saleData.paymentStatus)
             etGlobalNote.setText(saleData.notes)
             val totalPrice = saleData.saleItems.sumOf { it.totalSellingPrice }
-            binding.tvTotalPrice.text = "Total Price: Rs. $totalPrice"
-
+            tvTotalPrice.text = "Total Price: Rs. $totalPrice"
+            textTimestamps.text = "Added: ${formatDate(saleData.timestamp)}\nLast Updated: ${formatDate(saleData.updatedTimestamp)}"
         }
     }
 

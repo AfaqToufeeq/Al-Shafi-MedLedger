@@ -84,7 +84,7 @@ class SaleMedicineAdapter(
                         else -> "Break-Even" to R.drawable.ic_balance
                     }
 
-                    tvProfitPerUnit.text = "Rs ${RsFormatHelper.formatPrice(profitPerUnit, 2)} $profitLabel"
+                    tvProfitPerUnit.text = "${RsFormatHelper.formatPrice(profitPerUnit, 2)} $profitLabel"
                     tvProfitPerUnit.setCompoundDrawablesWithIntrinsicBounds(0, 0, profitDrawable, 0)
                     tvProfitPerUnit.compoundDrawablePadding = 8
 

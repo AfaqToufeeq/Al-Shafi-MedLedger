@@ -1,6 +1,7 @@
 package com.pentabytex.alshafimedledger.data.models
 
 import android.os.Parcelable
+import com.pentabytex.alshafimedledger.enums.PaymentStatus
 import kotlinx.parcelize.Parcelize
 
 
@@ -12,7 +13,10 @@ data class Sale(
     val saleItems: List<SaleItem> = emptyList(),
     val notes: String = "No notes",
     val totalPrice: Double = 0.0,
-    val timestamp: Long = System.currentTimeMillis()
+    val amountReceived: Double = 0.0,             // NEW
+    val paymentStatus: String = PaymentStatus.PENDING.displayName,
+    val timestamp: Long = System.currentTimeMillis(),
+    val updatedTimestamp: Long = System.currentTimeMillis()
 ) : Parcelable
 
 @Parcelize

@@ -1,9 +1,11 @@
 package com.pentabytex.alshafimedledger.ui.fragments
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pentabytex.alshafimedledger.adapter.ConfirmationAdapter
 import com.pentabytex.alshafimedledger.data.models.Sale
 import com.pentabytex.alshafimedledger.databinding.FragmentConfirmationBinding
+import com.pentabytex.alshafimedledger.enums.PaymentStatus
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.utils.Utils
 import com.pentabytex.alshafimedledger.viewmodels.NewSaleSharedViewModel
@@ -58,18 +61,26 @@ class ConfirmationFragment : Fragment() {
             }
 
             btnConfirm.setOnClickListener { confirmData() }
+            actvPaymentStatus.setOnClickListener { actvPaymentStatus.showDropDown() }
+
         }
     }
 
     private fun confirmData() {
         val notes = binding.etGlobalNote.text.toString().ifBlank { "No notes" }
+        val receivedAmount = binding.etPaymentReceived.text.toString().toDoubleOrNull() ?: 0.0
+        val selectedStatusStr = binding.actvPaymentStatus.text.toString()
+        val selectedStatus = PaymentStatus.fromString(selectedStatusStr)?.displayName ?: PaymentStatus.PENDING.displayName
+
         val updatedSales = saleSharedViewModel.selectedCustomer.value?.let {
             Sale(
                 customerId = it.id,
                 customerName =  it.name,
                 saleItems =  saleSharedViewModel.saleItemDetailsList.value ?: emptyList(),
                 notes = notes,
-                totalPrice = totalPrice
+                totalPrice = totalPrice,
+                amountReceived = receivedAmount,
+                paymentStatus = selectedStatus
             )
         }
 
@@ -81,6 +92,13 @@ class ConfirmationFragment : Fragment() {
         adapter = ConfirmationAdapter()
         binding.rvMedicines.layoutManager = LinearLayoutManager(requireContext())
         binding.rvMedicines.adapter = adapter
+
+        val statusAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.simple_dropdown_item_1line,
+            PaymentStatus.entries.filter { it != PaymentStatus.ALL }.map { it.displayName }
+        )
+        binding.actvPaymentStatus.setAdapter(statusAdapter)
     }
 
     private fun observeData() {

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pentabytex.alshafimedledger.R
 import com.pentabytex.alshafimedledger.data.models.Sale
 import com.pentabytex.alshafimedledger.databinding.ItemSaleBinding
+import com.pentabytex.alshafimedledger.enums.PaymentStatus
 import java.text.DateFormat
 import java.util.Date
 
@@ -33,7 +34,11 @@ class SaleAdapter(
             tvCustomerName.text = sale.customerName
             tvTimestamp.text = DateFormat.getDateTimeInstance().format(Date(sale.timestamp))
             tvNotes.text = sale.notes
+            chipStatus.text = sale.paymentStatus
             tvTotalCost.text = "Total: Rs. ${sale.totalPrice}"
+
+            val statusEnum = PaymentStatus.fromString(sale.paymentStatus) ?: PaymentStatus.PENDING
+            chipStatus.setChipBackgroundColorResource(statusEnum.colorRes)
 
             // Toggle visibility based on expansion state
             rvSaleItems.visibility = if (isExpanded) View.VISIBLE else View.GONE

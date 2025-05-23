@@ -52,6 +52,15 @@ class SaleRepository @Inject constructor(
         }
     }
 
+    suspend fun updateSale(sale: Sale): Result<Unit> {
+        return try {
+            salesRef.child(sale.saleId).setValue(sale).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun getSales(): Result<List<Sale>> {
         return try {
             val snapshot = salesRef.get().await()

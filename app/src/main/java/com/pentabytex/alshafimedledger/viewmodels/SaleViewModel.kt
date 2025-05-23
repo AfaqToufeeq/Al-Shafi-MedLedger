@@ -34,6 +34,10 @@ class SaleViewModel @Inject constructor(
     private val _deleteSaleState = MutableStateFlow<Resource<Unit>>(Resource.Idle)
     val deleteSaleState: StateFlow<Resource<Unit>> = _deleteSaleState
 
+    private val _updateSaleState = MutableStateFlow<Resource<Unit>>(Resource.Idle)
+    val updateSaleState: StateFlow<Resource<Unit>> = _updateSaleState
+
+
     init {
         observeSalesRealtime()
     }
@@ -69,6 +73,18 @@ class SaleViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateSale(sale: Sale) {
+        _updateSaleState.value = Resource.Loading
+        viewModelScope.launch {
+            val result = repository.updateSale(sale)
+            _updateSaleState.value = result.fold(
+                onSuccess = { Resource.Success(Unit) },
+                onFailure = { Resource.Error(it.message ?: "Error updating sale") }
+            )
+        }
+    }
+
 
     fun searchSales(query: String) {
         viewModelScope.launch(dispatcherProvider.default) {
