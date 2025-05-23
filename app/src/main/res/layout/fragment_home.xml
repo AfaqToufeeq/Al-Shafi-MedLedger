@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Main Content Layout (Real UI) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainContent"
         android:layout_width="match_parent"
@@ -81,33 +80,33 @@
                             android:id="@+id/sessionsCardTitle"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Your Group Sessions!"
+                            android:text="Manage Medicine Stock!"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/viewSessionGroupButton"
+                            app:layout_constraintEnd_toStartOf="@id/sellNowButton"
                             app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
                         <TextView
                             android:id="@+id/sessionCardDescription"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Connect with your therapist and peers in a group session"
+                            android:text="Easily track your stock and sell medicines to customers with just a few taps."
                             android:textSize="14sp"
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="10dp"
                             app:layout_constraintTop_toBottomOf="@id/sessionsCardTitle"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/viewSessionGroupButton"
+                            app:layout_constraintEnd_toStartOf="@id/sellNowButton"
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/viewSessionGroupButton"
+                            android:id="@+id/sellNowButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Join them"
+                            android:text="Sell Now"
                             android:textSize="14sp"
                             app:cornerRadius="16dp"
                             android:layout_marginStart="8dp"
@@ -115,65 +114,6 @@
                             app:layout_constraintBottom_toBottomOf="parent"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
-
-                <!-- Upcoming Therapy Session -->
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/sessionCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    app:cardCornerRadius="16dp"
-                    android:visibility="gone"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:cardElevation="5dp"
-                    android:background="@color/white">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/sessionTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            app:layout_constraintHorizontal_bias="0"
-                            android:layout_marginHorizontal="12dp"
-                            android:text="You currently have no upcoming appointments"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/sessionTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tomorrow at 4:00 PM"
-                            android:layout_marginTop="10dp"
-                            android:textSize="14sp"
-                            android:layout_marginStart="15dp"
-                            app:layout_constraintTop_toBottomOf="@id/sessionTitle"
-                            app:layout_constraintStart_toStartOf="parent"/>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/joinSessionButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Join Session"
-                            android:layout_margin="12dp"
-                            app:cornerRadius="16dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.google.android.material.card.MaterialCardView>
-
 
                 <!-- Quick Access Buttons -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -194,7 +134,7 @@
                     android:id="@+id/upComingTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upcoming Appointments"
+                    android:text="Sales History"
                     android:textSize="18sp"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold"
@@ -229,34 +169,34 @@
                             android:id="@+id/upcomingCardTitle"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Your Upcoming Appointments"
+                            android:text="Your Sales History"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/viewAppointmentsButton"
+                            app:layout_constraintEnd_toStartOf="@id/salesHistoryButton"
                             app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
                         <TextView
                             android:id="@+id/upcomingCardDescription"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Easily view and keep track of your upcoming therapy sessions"
+                            android:text="Review all your past sales, profits, and transactions at a glance."
                             android:textSize="14sp"
                             android:textColor="@color/gray"
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="10dp"
                             app:layout_constraintTop_toBottomOf="@id/upcomingCardTitle"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/viewAppointmentsButton"
+                            app:layout_constraintEnd_toStartOf="@id/salesHistoryButton"
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/viewAppointmentsButton"
+                            android:id="@+id/salesHistoryButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="See All"
+                            android:text="View All"
                             android:textSize="14sp"
                             app:cornerRadius="16dp"
                             android:layout_marginStart="8dp"

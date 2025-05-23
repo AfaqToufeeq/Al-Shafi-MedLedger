@@ -68,6 +68,12 @@ class HomeFragment : Fragment() {
         binding.profileImage.setOnClickListener {
 //            navigateToActivity(requireContext(), ProfileActivity::class.java, isAnimation = true)
         }
+        binding.sellNowButton.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_medicinesFragment)
+        }
+        binding.salesHistoryButton.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_salesFragment)
+        }
     }
 
     private fun observeViewModel() {

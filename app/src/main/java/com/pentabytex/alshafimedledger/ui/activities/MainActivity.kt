@@ -49,7 +49,10 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.homeFragment)
                     true
                 }
-
+                R.id.medicinesFragment -> {
+                    navController.navigate(R.id.medicinesFragment)
+                    true
+                }
                 else -> {
                     navController.navigate(R.id.homeFragment)
                     true
