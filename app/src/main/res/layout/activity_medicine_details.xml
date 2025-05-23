@@ -273,9 +273,9 @@
                 android:layout_height="wrap_content"
                 android:text="Profit Summary"
                 android:textStyle="bold"
+                android:textSize="16sp"
                 android:layout_marginTop="24dp"
-                android:layout_marginStart="8dp"/>
-
+                android:layout_marginStart="8dp" />
 
             <!-- Profit Summary Card -->
             <com.google.android.material.card.MaterialCardView
@@ -292,17 +292,27 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
+                    <!-- Section 1: Cost & Sale Breakdown -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cost &amp; Sale Breakdown"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp" />
+
                     <!-- Total Cost -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="4dp">
+                        android:layout_marginTop="8dp">
                         <TextView
                             android:text="Total Cost Price"
                             android:textColor="@color/black"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/textCostPrice"
                             android:text="PKR 800"
@@ -310,10 +320,31 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="end"/>
+                            android:gravity="end" />
                     </LinearLayout>
 
-                    <!-- Total Sale -->
+                    <!-- Price Per Unit -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+                        <TextView
+                            android:text="Price Per Unit"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/textPricePerUnit"
+                            android:text="PKR 40"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end" />
+                    </LinearLayout>
+
+                    <!-- Total Sale Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -323,7 +354,7 @@
                             android:text="Total Sale Price"
                             android:textColor="@color/black"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/textTotalSalePrice"
                             android:text="PKR 1800"
@@ -331,10 +362,71 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="end" />
+                    </LinearLayout>
+
+                    <!-- Sale Per Unit -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+                        <TextView
+                            android:text="Sale Per Unit"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/textSalePerUnit"
+                            android:text="PKR 40"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/dividerColor"
+                        android:layout_marginTop="20dp" />
+
+                    <!-- Section 2: Profit Analysis -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Profit Analysis"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:layout_marginTop="16dp" />
+
+                    <!-- Profit Per Unit -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:text="Profit Per Unit"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/textProfitPerUnit"
+                            android:text="PKR 20"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="end"/>
                     </LinearLayout>
 
-                    <!-- Profit -->
+
+                    <!-- Profit Amount -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -344,7 +436,7 @@
                             android:text="Profit Amount"
                             android:textColor="@color/black"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/textProfitPrice"
                             android:text="PKR 1000"
@@ -352,10 +444,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="end"/>
+                            android:gravity="end" />
                     </LinearLayout>
 
-                    <!-- Profit % -->
+                    <!-- Profit Percentage -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -365,7 +457,7 @@
                             android:text="Total Profit %"
                             android:textColor="@color/black"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/textProfitPercent"
                             android:text="50%"
@@ -373,8 +465,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="end"/>
+                            android:gravity="end" />
                     </LinearLayout>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -406,8 +499,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Notes or Comments"
-                        android:textColor="@color/gray"
-                        android:layout_marginTop="10dp"/>
+                        android:textColor="@color/gray" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -488,7 +580,6 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <!-- Buttons -->
     <LinearLayout
         android:id="@+id/buttonsContainer"
         android:layout_width="0dp"
@@ -514,6 +605,18 @@
             android:layout_marginEnd="8dp"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAdjustQuantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Adjust Qty"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            app:backgroundTint="@color/colorPrimaryVariant"
+            app:cornerRadius="12dp"
+            android:layout_marginEnd="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonEdit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -522,8 +625,7 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/colorSecondary"
-            app:cornerRadius="12dp"
-            android:layout_marginStart="8dp"/>
+            app:cornerRadius="12dp"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

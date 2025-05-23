@@ -34,4 +34,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="update_medicine">Update Medicine</string>
     <string name="update_customer">Update Customer</string>
+
+    <string name="remaining_stock_format">Remaining: %1$d units</string>
+    <string name="error_quantity_exceeds_stock">Quantity exceeds available stock (%1$d)</string>
+    <string name="total_selling_format">Total Selling: %1$s</string>
+    <string name="total_purchase_format">Total Purchase: %1$s</string>
+    <string name="profit_format">Profit: %1$s (%2$s)</string>
+
 </resources>

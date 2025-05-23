@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:contentPadding="16dp"
+    app:cardBackgroundColor="@color/cardBackgroundColor">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvMedicineName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Medicine Name"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAllCaps="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivDelete"
+            android:layout_marginEnd="8dp" />
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:src="@drawable/ic_remove"
+            app:layout_constraintTop_toTopOf="@id/tvMedicineName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tvMedicineName" />
+
+        <!-- Available Stock -->
+        <TextView
+            android:id="@+id/tvAvailableStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available Stock: 20 units"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            android:textColor="@color/gray"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/tvMedicineName"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Info Row: Purchase Price and Total Cost -->
+        <LinearLayout
+            android:id="@+id/infoRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tvAvailableStock"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/tvPurchasePricePerUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cost/Unit: Rs 0.00"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="@color/gray"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tvTotalPurchasePrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Cost: Rs 0.00"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="@color/gray"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <!-- Inputs side-by-side: Quantity and Selling Price -->
+        <LinearLayout
+            android:id="@+id/inputsRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/infoRow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:weightSum="2">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/quantityInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Quantity"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etQuantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:importantForAccessibility="yes"
+                    android:contentDescription="Input quantity" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sellingPriceInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:hint="Sell price/Unit"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSellingPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
+                    android:importantForAccessibility="yes"
+                    android:contentDescription="Input selling price per unit" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Row with Total Price and Profit -->
+        <LinearLayout
+            android:id="@+id/totalProfitRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/inputsRow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/tvTotalSell"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Selling: Rs 0.00"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvProfit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:text="Profit: Rs 0.00"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="@color/green"
+                android:textStyle="bold"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <!-- Profit per Unit below -->
+        <TextView
+            android:id="@+id/tvProfitPerUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profit/Unit: Rs 0.00"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/green"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/totalProfitRow"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

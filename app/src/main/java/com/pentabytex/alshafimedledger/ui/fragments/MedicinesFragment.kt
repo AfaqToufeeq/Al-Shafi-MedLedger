@@ -4,12 +4,12 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,11 +21,12 @@ import com.pentabytex.alshafimedledger.adapter.MedicineAdapter
 import com.pentabytex.alshafimedledger.data.models.Medicine
 import com.pentabytex.alshafimedledger.databinding.FragmentMedicinesBinding
 import com.pentabytex.alshafimedledger.helpersutils.Resource
-import com.pentabytex.alshafimedledger.ui.activities.AddMedicineActivity
 import com.pentabytex.alshafimedledger.ui.activities.MedicineDetailsActivity
+import com.pentabytex.alshafimedledger.ui.activities.NewSaleActivity
 import com.pentabytex.alshafimedledger.utils.Constants.IntentExtras.TRANSFER_DATA
 import com.pentabytex.alshafimedledger.utils.Utils
 import com.pentabytex.alshafimedledger.utils.Utils.navigateToActivity
+import com.pentabytex.alshafimedledger.utils.Utils.showToast
 import com.pentabytex.alshafimedledger.viewmodels.MedicineViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -59,19 +60,25 @@ class MedicinesFragment : Fragment() {
         observeMedicines()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.selectionActionsLayout.ivCloseSelection.performClick()
+
+    }
+
     private fun setUpUI() {
         binding.apply {
             toolbar.backTitleTV.text = "Medicines"
             toolbar.backIV.setOnClickListener { findNavController().popBackStack() }
-            selectionActionsLayout.ivCloseSelection.setOnClickListener { toggleSelectionMode(false, medicine = Medicine()) }
+
+            selectionActionsLayout.ivCloseSelection.setOnClickListener {
+                toggleSelectionMode(false, medicine = Medicine())
+            }
             selectionActionsLayout.ivMoreOptions.setOnClickListener {
                 showSelectionOptionsMenu(it)
-
-                Log.d("MedicinesFragmentSelection", "Selected Count: ${selectedMedicines.size}")
-                selectedMedicines.forEach {
-                    Log.d("MedicinesFragmentSelection", "Selected Medicine: ${it.name}")
-                }
             }
+
+            btnNext.setOnClickListener { navigateToSalesDetails() }
         }
     }
 
@@ -81,12 +88,16 @@ class MedicinesFragment : Fragment() {
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.action_select_all -> {
+                    selectAllMedicines(true, Medicine())
+                    true
+                }
                 R.id.action_delete -> {
                     deleteMedicinesBulk()
                     true
                 }
-                R.id.action_select_customers -> {
-                    addMedicinesToCustomers()
+                R.id.action_sales_details -> {
+                    navigateToSalesDetails()
                     true
                 }
                 else -> false
@@ -96,11 +107,16 @@ class MedicinesFragment : Fragment() {
         popupMenu.show()
     }
 
-    private fun addMedicinesToCustomers() {
-        val selectedMedicineIds = selectedMedicines.map { it.id }
-
+    private fun navigateToSalesDetails() {
+        if (selectedMedicines.isNotEmpty()) {
+            val bundle = Bundle().apply {
+                putParcelableArrayList(TRANSFER_DATA, ArrayList(selectedMedicines))
+            }
+            navigateToActivity(requireActivity(), NewSaleActivity::class.java, extras = bundle)
+        } else {
+            showToast(requireContext(), "Please select at least one medicine before proceeding")
+        }
     }
-
 
     private fun setupSearch() {
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
@@ -216,7 +232,7 @@ class MedicinesFragment : Fragment() {
                         is Resource.Success -> {
                             binding.loadingOverlay.visibility = View.GONE
                             binding.selectionActionsLayout.ivCloseSelection.performClick()
-                           Utils.showSnackbar(binding.root,"Medicine record is deleted!")
+                            Utils.showSnackbar(binding.root,"Medicine record is deleted!")
                         }
 
                         is Resource.Error -> {
@@ -233,13 +249,35 @@ class MedicinesFragment : Fragment() {
 
     private fun toggleSelectionMode(enable: Boolean, medicine: Medicine) {
         isSelectionMode = enable
-        binding.selectionActionsLayout.root.visibility = if (enable) View.VISIBLE else View.GONE
-        binding.toolbar.root.visibility = if (enable) View.GONE else View.VISIBLE
+
+        with(binding) {
+            selectionActionsLayout.root.isVisible = enable
+            btnNext.isVisible = enable
+            toolbar.root.isVisible = !enable
+        }
+
         adapter.setSelectionMode(enable, medicine)
+
         if (!enable) {
             selectedMedicines.clear()
-            adapter.setSelectionMode(false, medicine) // Disable and clear selection
         }
+
+        updateSelectedCount()
+    }
+
+
+    private fun selectAllMedicines(enable: Boolean, medicine: Medicine) {
+        if (!isSelectionMode) {
+            toggleSelectionMode(true, medicine)
+        }
+
+        adapter.selectAll(enable)
+
+        selectedMedicines.clear()
+        if (enable) {
+            selectedMedicines.addAll(adapter.currentList)
+        }
+
         updateSelectedCount()
     }
 

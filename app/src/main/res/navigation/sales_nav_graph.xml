@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sales_nav_graph"
+    app:startDestination="@id/saleDetailsFragment">
+
+
+    <fragment
+        android:id="@+id/saleDetailsFragment"
+        android:name="com.pentabytex.alshafimedledger.ui.fragments.SaleDetailsFragment"
+        android:label="fragment_sale_details"
+        tools:layout="@layout/fragment_sale_details" >
+        <action
+            android:id="@+id/action_saleDetailsFragment_to_customersFragment2"
+            app:destination="@id/customersFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/customersFragment2"
+        android:name="com.pentabytex.alshafimedledger.ui.fragments.CustomersFragment"
+        android:label="fragment_customers"
+        tools:layout="@layout/fragment_customers" >
+        <action
+            android:id="@+id/action_customersFragment2_to_sales_nav_graph"
+            app:popUpTo="@id/sales_nav_graph" />
+        <action
+            android:id="@+id/action_customersFragment2_to_confirmationFragment"
+            app:destination="@id/confirmationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmationFragment"
+        android:name="com.pentabytex.alshafimedledger.ui.fragments.ConfirmationFragment"
+        android:label="fragment_confirmation"
+        tools:layout="@layout/fragment_confirmation" >
+        <action
+            android:id="@+id/action_confirmationFragment_to_sales_nav_graph"
+            app:popUpTo="@id/sales_nav_graph" />
+    </fragment>
+</navigation>

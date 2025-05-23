@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:text="Rs. 18.00"
             android:textStyle="bold"
-            android:textColor="@color/colorError"
+            android:textColor="@color/colorPrimaryLight"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/labelSellPrice"
             app:layout_constraintStart_toStartOf="@id/labelSellPrice" />
@@ -192,7 +192,7 @@
             android:layout_height="wrap_content"
             android:text="Rs. 6.00"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryVariant"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/labelProfit"
             app:layout_constraintStart_toStartOf="@id/labelProfit" />
@@ -216,7 +216,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryVariant"
             android:text="40%"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/labelProfitPercent"

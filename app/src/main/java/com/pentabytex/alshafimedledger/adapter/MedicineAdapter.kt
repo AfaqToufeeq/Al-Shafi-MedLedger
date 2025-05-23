@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pentabytex.alshafimedledger.R
 import com.pentabytex.alshafimedledger.data.models.Medicine
 import com.pentabytex.alshafimedledger.databinding.ItemMedicineBinding
+import com.pentabytex.alshafimedledger.utils.RsFormatHelper
 
 class MedicineAdapter(
     private val onItemClick: (Medicine) -> Unit,
@@ -34,6 +35,16 @@ class MedicineAdapter(
     }
 
 
+    fun selectAll(enable: Boolean) {
+        if (enable) {
+            selectedItems.clear()
+            selectedItems.addAll(currentList.map { it.id })
+        } else {
+            selectedItems.clear()
+        }
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineViewHolder {
         val binding = ItemMedicineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MedicineViewHolder(binding)
@@ -49,12 +60,21 @@ class MedicineAdapter(
     inner class MedicineViewHolder(private val binding: ItemMedicineBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(medicine: Medicine, isExpanded: Boolean, isSelected: Boolean, isSelectionMode: Boolean) = with(binding) {
+        fun bind(
+            medicine: Medicine,
+            isExpanded: Boolean,
+            isSelected: Boolean,
+            isSelectionMode: Boolean
+        ) = with(binding) {
             tvMedicineName.text = medicine.name
             tvTypeVolume.text = "${medicine.type} • ${medicine.volume}"
             tvQuantity.text = medicine.totalStock.toString()
-            tvPurchasePrice.text = "Rs. %.2f".format(medicine.purchasePrice)
-            tvSellingPrice.text = "Rs. %.2f".format(medicine.sellingPrice)
+
+            val remaining = medicine.totalStock - medicine.soldStock
+            tvRemainingStock.text = "$remaining of ${medicine.totalStock} units available"
+
+            tvPurchasePrice.text = RsFormatHelper.formatPrice(medicine.purchasePrice, 0)
+            tvSellingPrice.text = RsFormatHelper.formatPrice(medicine.sellingPrice, 0)
 
             val profit = medicine.sellingPrice - medicine.purchasePrice
             val profitPercentage = if (medicine.purchasePrice != 0.0) {
@@ -63,8 +83,22 @@ class MedicineAdapter(
                 0.0
             }
 
-            tvProfit.text = "Rs. %.2f".format(profit)
-            tvProfitPercent.text = "%.1f%%".format(profitPercentage)
+            // Determine icon and color
+            val (profitLabel, profitIconRes, profitColorRes) = when {
+                medicine.sellingPrice > medicine.purchasePrice ->
+                    Triple("Profit", R.drawable.ic_profit, android.R.color.holo_green_dark)
+                medicine.sellingPrice < medicine.purchasePrice ->
+                    Triple("Loss", R.drawable.ic_loss, android.R.color.holo_red_dark)
+                else ->
+                    Triple("Break-Even", R.drawable.ic_balance, android.R.color.darker_gray)
+            }
+
+            val profitColor = root.context.getColor(profitColorRes)
+            tvProfit.setTextColor(profitColor)
+            tvProfitPercent.setTextColor(profitColor)
+
+            tvProfit.text = RsFormatHelper.formatPrice(profit, 0)
+            tvProfitPercent.text = RsFormatHelper.formatPercent(profitPercentage, profitLabel)
 
             // Toggle visibility based on expansion state
             detailsContainer.visibility = if (isExpanded) View.VISIBLE else View.GONE
@@ -87,7 +121,6 @@ class MedicineAdapter(
             }
 
             // Handle checkbox visibility and click
-            // Show checkboxes only in selection mode
             cbSelect.visibility = if (isSelectionMode) View.VISIBLE else View.GONE
             ivDelete.visibility = if (isSelectionMode) View.GONE else View.VISIBLE
             cbSelect.setOnCheckedChangeListener(null)
@@ -113,7 +146,6 @@ class MedicineAdapter(
             }
 
             ivDelete.setOnClickListener { onDeleteClick(medicine) }
-
         }
 
         // Function to toggle selection state and notify

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_customersFragment"
             app:destination="@id/customersFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_salesFragment"
+            app:destination="@id/salesFragment" />
 
     </fragment>
     <fragment
@@ -34,6 +37,15 @@
         tools:layout="@layout/fragment_customers" >
         <action
             android:id="@+id/action_customersFragment_to_nav_graph"
+            app:popUpTo="@id/nav_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/salesFragment"
+        android:name="com.pentabytex.alshafimedledger.ui.fragments.SalesFragment"
+        android:label="fragment_sales"
+        tools:layout="@layout/fragment_sales" >
+        <action
+            android:id="@+id/action_salesFragment_to_nav_graph"
             app:popUpTo="@id/nav_graph" />
     </fragment>
 

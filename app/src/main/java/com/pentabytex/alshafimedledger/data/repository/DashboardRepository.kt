@@ -11,7 +11,8 @@ class DashboardRepository @Inject constructor() {
             QuickAccessButton(DashboardTitle.AddMedicines.title, R.drawable.ic_add_medicines),
             QuickAccessButton(DashboardTitle.ViewMedicines.title, R.drawable.ic_view_medicine),
             QuickAccessButton(DashboardTitle.AddCustomers.title, R.drawable.ic_add_customer),
-            QuickAccessButton(DashboardTitle.ViewCustomers.title, R.drawable.ic_customers)
+            QuickAccessButton(DashboardTitle.ViewCustomers.title, R.drawable.ic_customers),
+            QuickAccessButton(DashboardTitle.SalesHistory.title, R.drawable.ic_sales)
         )
     }
 }

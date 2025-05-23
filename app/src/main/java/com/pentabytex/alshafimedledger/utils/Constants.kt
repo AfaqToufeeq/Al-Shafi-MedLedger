@@ -31,10 +31,11 @@ object Constants {
         const val USERS = "users"
         const val MEDICINES = "medicines"
         const val CUSTOMERS = "customers"
+        const val SALES = "sales"
 
     }
 
     // 🔹 Other Static Values
     const val EMAIL_ADDRESS = "jerryaxe24@gmail.com"
-    const val STOCK_LIMIT = 10
+    const val STOCK_LIMIT = 100
 }

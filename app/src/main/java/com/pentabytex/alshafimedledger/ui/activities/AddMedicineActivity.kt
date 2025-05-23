@@ -192,5 +192,26 @@ class AddMedicineActivity : AppCompatActivity() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                medicineViewModel.updateMedicineState.collect { state ->
+                    when (state) {
+                        is Resource.Loading -> {
+                            binding.btnSaveMedicine.isEnabled = false
+                        }
+                        is Resource.Success -> {
+                            showSuccess("Medicine updated successfully!")
+                            finish()
+                        }
+                        is Resource.Error -> {
+                            binding.btnSaveMedicine.isEnabled = true
+                            showError(state.message)
+                        }
+                        Resource.Idle -> Unit
+                    }
+                }
+            }
+        }
     }
 }

@@ -10,8 +10,4 @@
         android:id="@+id/action_delete"
         android:title="Delete"
         android:icon="@drawable/ic_trash"/>
-    <item
-        android:id="@+id/action_sales_details"
-        android:title="Edit Quantities"
-        android:icon="@drawable/ic_sales_details" />
 </menu>

@@ -122,8 +122,10 @@
                     android:id="@+id/edtSoldStock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Sold Stock"
-                    android:inputType="number" />
+                    android:hint="Sold Stock (Optional)"
+                    android:inputType="number"
+                    android:text="0"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Purchase Price -->
@@ -141,7 +143,7 @@
                     android:id="@+id/edtPurchasePrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Purchase Price"
+                    android:hint="Stock Purchase Price"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,7 +162,7 @@
                     android:id="@+id/edtSellingPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Selling Price (Optional)"
+                    android:hint="Stock Selling Price (Optional)"
                     android:text="0.0"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>

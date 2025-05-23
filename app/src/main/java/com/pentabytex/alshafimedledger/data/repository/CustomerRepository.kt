@@ -7,16 +7,19 @@ import com.google.firebase.database.ValueEventListener
 import com.pentabytex.alshafimedledger.data.models.Customer
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.utils.Constants.FirebaseCollections.CUSTOMERS
+import com.pentabytex.alshafimedledger.utils.CoroutineDispatcherProvider
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CustomerRepository @Inject constructor(
-    private val databaseReference: DatabaseReference
+    private val databaseReference: DatabaseReference,
+    private val dispatcher: CoroutineDispatcherProvider
 ) {
     private val customersRef = databaseReference.child(CUSTOMERS)
 
@@ -70,9 +73,34 @@ class CustomerRepository @Inject constructor(
         }
     }
 
+    suspend fun getCustomerById(id: String): Result<Customer> {
+        return try {
+            val snapshot = customersRef.child(id).get().await()
+            val customer = snapshot.getValue(Customer::class.java)
+            if (customer != null) {
+                Result.success(customer)
+            } else {
+                Result.failure(Exception("Customer not found"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun deleteCustomer(id: String): Result<Unit> {
         return try {
             customersRef.child(id).removeValue().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteCustomersBulk(customers: List<Customer>): Result<Unit> {
+        return try {
+            customers.forEach {
+                customersRef.child(it.id).removeValue().await()
+            }
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

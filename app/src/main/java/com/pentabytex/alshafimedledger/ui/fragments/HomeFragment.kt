@@ -16,7 +16,6 @@ import com.pentabytex.alshafimedledger.databinding.FragmentHomeBinding
 import com.pentabytex.alshafimedledger.enums.DashboardTitle
 import com.pentabytex.alshafimedledger.ui.activities.AddCustomerActivity
 import com.pentabytex.alshafimedledger.ui.activities.AddMedicineActivity
-import com.pentabytex.alshafimedledger.utils.Utils
 import com.pentabytex.alshafimedledger.utils.Utils.navigateToActivity
 import com.pentabytex.alshafimedledger.viewmodels.DashboardViewModel
 import com.pentabytex.alshafimedledger.viewmodels.UserViewModel
@@ -117,6 +116,9 @@ class HomeFragment : Fragment() {
                 }
                 DashboardTitle.ViewCustomers -> {
                     findNavController().navigate(R.id.action_homeFragment_to_customersFragment)
+                }
+                DashboardTitle.SalesHistory -> {
+                    findNavController().navigate(R.id.action_homeFragment_to_salesFragment)
                 }
 
                 else -> {

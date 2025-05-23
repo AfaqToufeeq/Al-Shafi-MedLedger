@@ -3,6 +3,7 @@ package com.pentabytex.alshafimedledger.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pentabytex.alshafimedledger.data.models.Customer
+import com.pentabytex.alshafimedledger.data.models.Medicine
 import com.pentabytex.alshafimedledger.data.repository.CustomerRepository
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.utils.CoroutineDispatcherProvider
@@ -26,6 +27,9 @@ class CustomerViewModel @Inject constructor(
 
     private val _filterCustomers = MutableStateFlow<Resource<List<Customer>>>(Resource.Idle)
     val filterCustomers: StateFlow<Resource<List<Customer>>> = _filterCustomers
+
+    private val _customer = MutableStateFlow<Resource<Customer>>(Resource.Idle)
+    val customer: StateFlow<Resource<Customer>> = _customer
 
     private val _updateCustomerState = MutableStateFlow<Resource<Unit>>(Resource.Idle)
     val updateCustomerState: StateFlow<Resource<Unit>> = _updateCustomerState
@@ -93,6 +97,17 @@ class CustomerViewModel @Inject constructor(
         }
     }
 
+    fun getCustomerById(id: String) {
+        _updateCustomerState.value = Resource.Loading
+        viewModelScope.launch {
+            val result = repository.getCustomerById(id)
+            _customer.value = result.fold(
+                onSuccess = { Resource.Success(it) },
+                onFailure = { Resource.Error(it.message ?: "Error updating customer") }
+            )
+        }
+    }
+
     fun updateCustomer(customer: Customer) {
         _updateCustomerState.value = Resource.Loading
         viewModelScope.launch {
@@ -111,6 +126,17 @@ class CustomerViewModel @Inject constructor(
             _deleteCustomerState.value = result.fold(
                 onSuccess = { Resource.Success(Unit) },
                 onFailure = { Resource.Error(it.message ?: "Error deleting customer") }
+            )
+        }
+    }
+
+    fun deleteCustomersBulk(customers: List<Customer>) {
+        _deleteCustomerState.value = Resource.Loading
+        viewModelScope.launch {
+            val result = repository.deleteCustomersBulk(customers)
+            _deleteCustomerState.value = result.fold(
+                onSuccess = { Resource.Success(Unit) },
+                onFailure = { Resource.Error(it.message ?: "Bulk delete failed") }
             )
         }
     }
