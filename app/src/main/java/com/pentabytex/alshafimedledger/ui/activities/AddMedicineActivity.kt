@@ -31,6 +31,8 @@ class AddMedicineActivity : AppCompatActivity() {
     private var medicineToEdit: Medicine? = null
 
     private val medicineTypes = arrayOf("Tablet", "Syrup", "Injection", "Capsule", "Vaccine", "Cream")
+    private var isEditing = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,7 @@ class AddMedicineActivity : AppCompatActivity() {
         getIntentData()
         setUpUI()
         setUpSpinner()
+        setupAutoCalculations()
         observeSaveState()
     }
 
@@ -72,18 +75,25 @@ class AddMedicineActivity : AppCompatActivity() {
         binding.apply {
             toolbar.apply {
                 if (!isEditMode) backTitleTV.text = DashboardTitle.AddMedicines.title
-
                 backIV.setOnClickListener { finish() }
             }
 
             btnSaveMedicine.setOnClickListener {
-                if (isFormValid()) {
-                    if (isEditMode) updateMedicineData(medicineToEdit!!.id)
-                    else saveMedicineData()
-
-                } else {
+                if (!isFormValid()) {
                     showError("Please fill all required fields.")
+                    return@setOnClickListener
                 }
+
+                val totalStock = edtTotalStock.text.toString().trim().toIntOrNull() ?: 0
+                val soldStock = edtSoldStock.text.toString().trim().toIntOrNull() ?: 0
+
+                if (soldStock > totalStock) {
+                    showError("Sold stock cannot be greater than total stock.")
+                    return@setOnClickListener
+                }
+
+                if (isEditMode) updateMedicineData(medicineToEdit!!.id)
+                else saveMedicineData()
             }
 
             edtMedicineName.addTextChangedListener { validateForm() }
@@ -99,6 +109,53 @@ class AddMedicineActivity : AppCompatActivity() {
     private fun setUpSpinner() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, medicineTypes)
         binding.spinnerMedicineType.setAdapter(adapter)
+    }
+
+
+    private fun setupAutoCalculations() {
+        binding.apply {
+            edtPurchasePrice.addTextChangedListener {
+                if (isEditing) return@addTextChangedListener
+
+                val totalCost = it.toString().toDoubleOrNull()
+                val totalStock = edtTotalStock.text.toString().toIntOrNull()
+
+                if (totalCost != null && totalStock != null && totalStock != 0) {
+                    isEditing = true
+                    edtPurchasePricePerUnit.setText((totalCost / totalStock).toString())
+                    isEditing = false
+                }
+            }
+
+            edtPurchasePricePerUnit.addTextChangedListener {
+                if (isEditing) return@addTextChangedListener
+
+                val pricePerUnit = it.toString().toDoubleOrNull()
+                val totalStock = edtTotalStock.text.toString().toIntOrNull()
+
+                if (pricePerUnit != null && totalStock != null) {
+                    isEditing = true
+                    edtPurchasePrice.setText((pricePerUnit * totalStock).toString())
+                    isEditing = false
+                }
+            }
+
+            edtTotalStock.addTextChangedListener {
+                if (isEditing) return@addTextChangedListener
+
+                val totalStock = it.toString().toIntOrNull()
+                val totalCost = edtPurchasePrice.text.toString().toDoubleOrNull()
+                val pricePerUnit = edtPurchasePricePerUnit.text.toString().toDoubleOrNull()
+
+                isEditing = true
+                if (totalCost != null && totalStock != null && totalStock != 0) {
+                    edtPurchasePricePerUnit.setText((totalCost / totalStock).toString())
+                } else if (pricePerUnit != null && totalStock != null) {
+                    edtPurchasePrice.setText((pricePerUnit * totalStock).toString())
+                }
+                isEditing = false
+            }
+        }
     }
 
 

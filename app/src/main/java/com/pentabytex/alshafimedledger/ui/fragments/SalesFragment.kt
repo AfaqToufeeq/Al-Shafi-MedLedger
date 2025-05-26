@@ -12,8 +12,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.pentabytex.alshafimedledger.adapter.SaleAdapter
 import com.pentabytex.alshafimedledger.databinding.FragmentSalesBinding
+import com.pentabytex.alshafimedledger.enums.PaymentStatus
+import com.pentabytex.alshafimedledger.enums.SaleSortType
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.ui.activities.ReturnMedicinesActivity
 import com.pentabytex.alshafimedledger.utils.Constants
@@ -55,8 +58,76 @@ class SalesFragment : Fragment() {
         binding.toolbar.apply {
             backTitleTV.text = "Sales History"
             backIV.setOnClickListener { findNavController().popBackStack() }
+            binding.btnFilter.setOnClickListener { showFilterDialog() }
+
         }
     }
+
+    private fun showFilterDialog() {
+        val appliedFilters = buildString {
+            if (viewModel.currentSearchQuery.isNotBlank()) append("Search: '${viewModel.currentSearchQuery}' | ")
+            append("Sort: ${when (viewModel.currentSortType) {
+                SaleSortType.DATE_DESC -> "Date ↓"
+                SaleSortType.DATE_ASC -> "Date ↑"
+                SaleSortType.PRICE_DESC -> "Price ↓"
+                SaleSortType.PRICE_ASC -> "Price ↑"
+                else -> "None"
+            }} | ")
+
+            append("Payment: ${when (viewModel.currentPaymentStatus) {
+                PaymentStatus.RECEIVED -> "Received"
+                PaymentStatus.PENDING -> "Pending"
+                PaymentStatus.NOT_RECEIVED -> "Not Received"
+                else -> "All"
+            }}")
+        }
+
+        val options = arrayOf(
+            "Sort by Date (Newest First)",
+            "Sort by Date (Oldest First)",
+            "Filter: Payment Received",
+            "Filter: Payment Pending",
+            "Sort by Price (High to Low)",
+            "Sort by Price (Low to High)",
+            "Filter by Date Range",
+            "Clear All Filters"
+        )
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Filters Applied:\n$appliedFilters")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> viewModel.sortSalesBy(SaleSortType.DATE_DESC)
+                    1 -> viewModel.sortSalesBy(SaleSortType.DATE_ASC)
+                    2 -> viewModel.filterByPaymentStatus(PaymentStatus.RECEIVED)
+                    3 -> viewModel.filterByPaymentStatus(PaymentStatus.PENDING)
+                    4 -> viewModel.sortSalesBy(SaleSortType.PRICE_DESC)
+                    5 -> viewModel.sortSalesBy(SaleSortType.PRICE_ASC)
+                    6 -> showDateRangePicker()
+                    7 -> viewModel.clearAllFilters()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+
+    private fun showDateRangePicker() {
+        val picker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText("Select Date Range")
+            .build()
+
+        picker.show(parentFragmentManager, picker.toString())
+
+        picker.addOnPositiveButtonClickListener { selection ->
+            val startMillis = selection.first ?: return@addOnPositiveButtonClickListener
+            val endMillis = selection.second ?: return@addOnPositiveButtonClickListener
+
+            // Call a function in your ViewModel to filter by range
+            viewModel.filterByDateRange(startMillis, endMillis)
+        }
+    }
+
 
     private fun setupSearch() {
         binding.edtSearch.addTextChangedListener(object : TextWatcher {

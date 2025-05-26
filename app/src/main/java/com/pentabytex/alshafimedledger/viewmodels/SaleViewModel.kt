@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.pentabytex.alshafimedledger.data.models.Sale
 import com.pentabytex.alshafimedledger.data.models.SaleItem
 import com.pentabytex.alshafimedledger.data.repository.SaleRepository
+import com.pentabytex.alshafimedledger.enums.PaymentStatus
+import com.pentabytex.alshafimedledger.enums.SaleSortType
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.utils.CoroutineDispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +39,11 @@ class SaleViewModel @Inject constructor(
     private val _updateSaleState = MutableStateFlow<Resource<Unit>>(Resource.Idle)
     val updateSaleState: StateFlow<Resource<Unit>> = _updateSaleState
 
+    // Sorting & Filtering
+    var currentSortType: SaleSortType = SaleSortType.DATE_DESC
+    var currentPaymentStatus: PaymentStatus = PaymentStatus.ALL
+    var currentSearchQuery: String = ""
+    var currentDateRange: Pair<Long, Long>? = null
 
     init {
         observeSalesRealtime()
@@ -85,29 +92,6 @@ class SaleViewModel @Inject constructor(
         }
     }
 
-
-    fun searchSales(query: String) {
-        viewModelScope.launch(dispatcherProvider.default) {
-            val resource = _sales.value
-            if (resource is Resource.Success) {
-                val list = resource.data
-                val filteredList = if (query.isBlank()) {
-                    list
-                } else {
-                    list.filter {
-                        it.saleId.contains(query, ignoreCase = true) ||
-                        it.customerName.contains(query, ignoreCase = true) ||
-                                it.totalPrice.toString().contains(query, ignoreCase = true) ||
-                                it.notes.contains(query, ignoreCase = true)
-                    }
-                }
-                _filterSales.emit(Resource.Success(filteredList))
-            } else {
-                _filterSales.emit(resource)
-            }
-        }
-    }
-
     fun deleteSale(id: String) {
         _deleteSaleState.value = Resource.Loading
         viewModelScope.launch {
@@ -127,6 +111,104 @@ class SaleViewModel @Inject constructor(
                 onSuccess = { Resource.Success(Unit) },
                 onFailure = { Resource.Error(it.message ?: "Error deleting customer") }
             )
+        }
+    }
+
+    fun searchSales2(query: String) {
+        viewModelScope.launch(dispatcherProvider.default) {
+            val resource = _sales.value
+            if (resource is Resource.Success) {
+                val list = resource.data
+                val filteredList = if (query.isBlank()) {
+                    list
+                } else {
+                    list.filter {
+                        it.saleId.contains(query, ignoreCase = true) ||
+                                it.customerName.contains(query, ignoreCase = true) ||
+                                it.totalPrice.toString().contains(query, ignoreCase = true) ||
+                                it.notes.contains(query, ignoreCase = true)
+                    }
+                }
+                _filterSales.emit(Resource.Success(filteredList))
+            } else {
+                _filterSales.emit(resource)
+            }
+        }
+    }
+
+    fun searchSales(query: String) {
+        currentSearchQuery = query
+        applyFilters()
+    }
+
+    fun sortSalesBy(type: SaleSortType) {
+        currentSortType = type
+        applyFilters()
+    }
+
+    fun filterByPaymentStatus(status: PaymentStatus) {
+        currentPaymentStatus = status
+        applyFilters()
+    }
+
+    fun filterByDateRange(start: Long, end: Long) {
+        currentDateRange = start to end
+        applyFilters()
+    }
+
+    fun clearAllFilters() {
+        currentSortType = SaleSortType.DATE_DESC
+        currentPaymentStatus = PaymentStatus.ALL
+        currentSearchQuery = ""
+        currentDateRange = null
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        viewModelScope.launch(dispatcherProvider.default) {
+            val resource = _sales.value
+            if (resource is Resource.Success) {
+                var filteredList = resource.data
+
+                // Filter by search query
+                if (currentSearchQuery.isNotBlank()) {
+                    val query = currentSearchQuery.lowercase()
+                    filteredList = filteredList.filter {
+                        it.saleId.contains(query, ignoreCase = true) ||
+                                it.customerName.contains(query, ignoreCase = true) ||
+                                it.notes.contains(query, ignoreCase = true) ||
+                                it.totalPrice.toString().contains(query)
+                    }
+                }
+
+                // Filter by payment status
+                filteredList = when (currentPaymentStatus) {
+                    PaymentStatus.RECEIVED ->
+                        filteredList.filter { it.paymentStatus == PaymentStatus.RECEIVED.displayName }
+                    PaymentStatus.NOT_RECEIVED ->
+                        filteredList.filter { it.paymentStatus == PaymentStatus.NOT_RECEIVED.displayName }
+                    PaymentStatus.PENDING ->
+                        filteredList.filter { it.paymentStatus == PaymentStatus.PENDING.displayName }
+                    else -> filteredList
+                }
+
+                // Sort
+                filteredList = when (currentSortType) {
+                    SaleSortType.DATE_ASC -> filteredList.sortedBy { it.timestamp }
+                    SaleSortType.DATE_DESC -> filteredList.sortedByDescending { it.timestamp }
+                    SaleSortType.PRICE_ASC -> filteredList.sortedBy { it.totalPrice }
+                    SaleSortType.PRICE_DESC -> filteredList.sortedByDescending { it.totalPrice }
+                }
+
+                // Filter by date range if set
+                currentDateRange?.let { (start, end) ->
+                    filteredList = filteredList.filter { it.timestamp in start..end }
+                }
+
+                _filterSales.emit(Resource.Success(filteredList))
+            } else {
+                _filterSales.emit(resource)
+            }
         }
     }
 }

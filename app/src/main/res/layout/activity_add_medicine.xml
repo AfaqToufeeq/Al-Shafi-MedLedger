@@ -49,7 +49,7 @@
                     android:id="@+id/edtMedicineName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Medicine Name"
+                    android:hint="Enter Medicine Name"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,7 +62,7 @@
                 android:background="@drawable/blue_outline"
                 android:drawableEnd="@drawable/arrow_down_grey"
                 android:dropDownHeight="200dp"
-                android:hint="Select Medicine Type"
+                android:hint="Choose Medicine Type"
                 android:padding="16dp"
                 android:textColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/edtMedicineNameLayout"
@@ -122,20 +122,40 @@
                     android:id="@+id/edtSoldStock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Sold Stock (Optional)"
+                    android:hint="Units Sold (Optional)"
                     android:inputType="number"
                     android:text="0"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Purchase Price -->
+            <!-- Purchase Price Per Unit -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edtPurchasePricePerUnitLayout"
+                style="@style/CustomTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/edtSoldStockLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:helperText="Enter either total cost or cost per unit. The other will be auto-calculated.">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPurchasePricePerUnit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Purchase Price per Unit"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Total Purchase Cost -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edtPurchasePriceLayout"
                 style="@style/CustomTextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/edtSoldStockLayout"
+                app:layout_constraintTop_toBottomOf="@id/edtPurchasePricePerUnitLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -143,9 +163,10 @@
                     android:id="@+id/edtPurchasePrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Stock Purchase Price"
+                    android:hint="Total Purchase Cost"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <!-- Selling Price -->
             <com.google.android.material.textfield.TextInputLayout
@@ -162,7 +183,7 @@
                     android:id="@+id/edtSellingPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Stock Selling Price (Optional)"
+                    android:hint="Total Revenue from Sales (Optional)"
                     android:text="0.0"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -183,7 +204,7 @@
                     android:id="@+id/edtNotes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Notes or comments (optional)"
+                    android:hint="Additional Notes (optional)"
                     android:inputType="textMultiLine"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -197,7 +218,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Save Medicine"
+        android:text="Save Medicine Details"
         android:textSize="18sp"
         android:textColor="@color/white"
         android:backgroundTint="@color/colorPrimary"
