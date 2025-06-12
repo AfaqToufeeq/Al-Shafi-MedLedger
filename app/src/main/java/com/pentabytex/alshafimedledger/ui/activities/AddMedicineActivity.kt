@@ -63,6 +63,7 @@ class AddMedicineActivity : AppCompatActivity() {
                 edtSoldStock.setText(med.soldStock.toString())
                 edtPurchasePrice.setText(med.purchasePrice.toString())
                 edtSellingPrice.setText(med.sellingPrice.toString())
+                edtPurchasePricePerUnit.setText(med.purchasePricePerUnit.toString())
 
                 spinnerMedicineType.setText(med.type, false)
                 btnSaveMedicine.text = getString(R.string.update_medicine)
@@ -179,6 +180,7 @@ class AddMedicineActivity : AppCompatActivity() {
         val totalStock = binding.edtTotalStock.text.toString().trim().toInt()
         val soldStock = binding.edtSoldStock.text.toString().trim().toInt()
         val purchasePrice = binding.edtPurchasePrice.text.toString().trim().toDouble()
+        val purchasePricePerUnit = binding.edtPurchasePricePerUnit.text.toString().trim().toDouble()
         val sellingPrice = binding.edtSellingPrice.text.toString().trim().toDouble()
 
         val medicine = Medicine(
@@ -190,6 +192,7 @@ class AddMedicineActivity : AppCompatActivity() {
             totalStock = totalStock,
             soldStock = soldStock,
             purchasePrice = purchasePrice,
+            purchasePricePerUnit = purchasePricePerUnit,
             sellingPrice = sellingPrice
         )
 
@@ -207,6 +210,7 @@ class AddMedicineActivity : AppCompatActivity() {
             soldStock = binding.edtSoldStock.text.toString().trim().toInt(),
             totalStock = binding.edtTotalStock.text.toString().trim().toInt(),
             purchasePrice = binding.edtPurchasePrice.text.toString().trim().toDouble(),
+            purchasePricePerUnit = binding.edtPurchasePricePerUnit.text.toString().trim().toDouble(),
             sellingPrice = binding.edtSellingPrice.text.toString().trim().toDouble(),
             createdAt = medicineToEdit?.createdAt ?: System.currentTimeMillis(),
         )

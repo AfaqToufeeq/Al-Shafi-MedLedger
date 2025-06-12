@@ -13,6 +13,7 @@ data class Medicine(
     val totalStock: Int = 0,
     val soldStock: Int = 0,
     val purchasePrice: Double = 0.0,
+    val purchasePricePerUnit: Double = 0.0,
     val sellingPrice: Double = 0.0, // Optional pre-filled price
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()

@@ -12,6 +12,7 @@ import com.pentabytex.alshafimedledger.databinding.ItemMedicineBinding
 import com.pentabytex.alshafimedledger.utils.RsFormatHelper
 
 class MedicineAdapter(
+    private val reStockItem: (Medicine) -> Unit,
     private val onItemClick: (Medicine) -> Unit,
     private val onDeleteClick: (Medicine) -> Unit,
     private val onItemLongClick: (Medicine) -> Unit,
@@ -128,6 +129,10 @@ class MedicineAdapter(
 
             cbSelect.setOnCheckedChangeListener { _, isChecked ->
                 toggleSelection(medicine, isChecked)
+            }
+
+            btnRestock.setOnClickListener {
+                reStockItem(medicine)
             }
 
             root.setOnClickListener {

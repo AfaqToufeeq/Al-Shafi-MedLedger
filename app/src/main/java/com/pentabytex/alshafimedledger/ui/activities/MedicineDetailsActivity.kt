@@ -2,6 +2,7 @@ package com.pentabytex.alshafimedledger.ui.activities
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -54,6 +55,40 @@ class MedicineDetailsActivity : AppCompatActivity() {
         buttonEdit.setOnClickListener { navigateToEditScreen() }
         buttonDelete.setOnClickListener { medicine?.let { showDeleteDialog(it) } }
         buttonAdjustQuantity.setOnClickListener { navigateToSalesDetails() }
+        btnAddStock.setOnClickListener { addNewStock() }
+
+    }
+
+    private fun addNewStock() {
+        binding.apply {
+            val addStockStr = edtAddStock.text.toString()
+            val addedStock = addStockStr.toIntOrNull()
+            if (addedStock != null && addedStock > 0 && medicine != null) {
+                medicine?.let { medicine ->
+                    val existingTotalStock = medicine.totalStock
+                    val existingPurchasePrice = medicine.purchasePrice
+                    val existingPricePerUnit = medicine.purchasePricePerUnit
+
+                    // Calculate new purchase amount
+                    val newPurchase = addedStock * existingPricePerUnit
+
+                    val updatedTotalStock = existingTotalStock + addedStock
+                    val updatedTotalPurchasePrice = existingPurchasePrice + newPurchase
+
+                    val updatedMedicine = medicine.copy(
+                        totalStock = updatedTotalStock,
+                        purchasePrice = updatedTotalPurchasePrice,
+                        updatedAt = System.currentTimeMillis()
+                    )
+                    viewModel.updateMedicine(updatedMedicine)
+                    populateUI(updatedMedicine)
+                }
+                edtAddStock.text?.clear()
+                showSnackbar("$addedStock units added to stock.")
+            } else {
+                showSnackbar("Please enter a valid stock number.")
+            }
+        }
     }
 
     private fun navigateToSalesDetails() {
@@ -103,7 +138,7 @@ class MedicineDetailsActivity : AppCompatActivity() {
     private fun setupPricing(med: Medicine) = with(binding) {
         val totalStock = med.totalStock.coerceAtLeast(1)
 
-        val pricePerUnit = med.purchasePrice / totalStock
+        val pricePerUnit = med.purchasePricePerUnit
         val sellPerUnit = med.sellingPrice / totalStock
 
         val profit = med.sellingPrice - med.purchasePrice

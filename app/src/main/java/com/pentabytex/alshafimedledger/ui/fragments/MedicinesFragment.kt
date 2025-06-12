@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pentabytex.alshafimedledger.R
 import com.pentabytex.alshafimedledger.adapter.MedicineAdapter
 import com.pentabytex.alshafimedledger.data.models.Medicine
+import com.pentabytex.alshafimedledger.databinding.DialogRestockBinding
 import com.pentabytex.alshafimedledger.databinding.FragmentMedicinesBinding
 import com.pentabytex.alshafimedledger.helpersutils.Resource
 import com.pentabytex.alshafimedledger.ui.activities.MedicineDetailsActivity
@@ -131,7 +132,10 @@ class MedicinesFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = MedicineAdapter(
-            onItemClick = { medicine ->
+            reStockItem = { medicine ->
+                restockMedicine(medicine)
+            }
+            ,onItemClick = { medicine ->
                 navigationToMedicineDetails(medicine)
             },
             onDeleteClick = { medicine ->
@@ -161,6 +165,60 @@ class MedicinesFragment : Fragment() {
             medicinesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             medicinesRecyclerView.adapter = adapter
         }
+    }
+
+    private fun restockMedicine(medicine: Medicine) {
+        val dialogBinding = DialogRestockBinding.inflate(LayoutInflater.from(requireContext()))
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .setCancelable(true)
+            .create()
+
+        // Set medicine details
+        dialogBinding.tvMedicineName.text = medicine.name
+        val remaining = medicine.totalStock - medicine.soldStock
+        dialogBinding.tvCurrentStock.text = "Remaining stock: ${remaining}"
+
+        // Update button click
+        dialogBinding.btnUpdateStock.setOnClickListener {
+            val stockText = dialogBinding.edtAddStock.text.toString()
+            if (stockText.isBlank()) {
+                dialogBinding.edtAddStockLayout.error = "Please enter a stock amount"
+                return@setOnClickListener
+            }
+
+            val addedStock = stockText.toIntOrNull()
+            if (addedStock == null || addedStock <= 0) {
+                dialogBinding.edtAddStockLayout.error = "Enter a valid number greater than 0"
+                return@setOnClickListener
+            }
+
+            dialogBinding.edtAddStockLayout.error = null // clear error
+
+            val existingTotalStock = medicine.totalStock
+            val existingPurchasePrice = medicine.purchasePrice
+            val existingPricePerUnit = medicine.purchasePricePerUnit
+
+            // Calculate new purchase amount
+            val newPurchase = addedStock * existingPricePerUnit
+
+            val updatedTotalStock = existingTotalStock + addedStock
+            val updatedTotalPurchasePrice = existingPurchasePrice + newPurchase
+
+            val updatedMedicine = medicine.copy(
+                totalStock = updatedTotalStock,
+                purchasePrice = updatedTotalPurchasePrice,
+                updatedAt = System.currentTimeMillis()
+            )
+            viewModel.updateMedicine(updatedMedicine)
+
+            dialog.dismiss()
+            showToast(requireContext(), "Stock updated for ${medicine.name}")
+        }
+
+        dialogBinding.closeBtn.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
     private fun navigationToMedicineDetails(medicine: Medicine) {
